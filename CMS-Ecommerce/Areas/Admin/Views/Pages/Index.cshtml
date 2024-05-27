@@ -9,9 +9,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table sorting" id="pages">
     <thead>
-        <tr>
+        <tr class="home">
             <th>
                 Title
             </th>
@@ -24,7 +24,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            <tr id="id_@item.Id" class="@item.Slug">
             <td>
                 @item.Title
             </td>
@@ -33,11 +33,33 @@
             </td>
             
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    @if (item.Id != 1)
+                    {
+                        <a class="confirm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                    }
             </td>
         </tr>
 }
     </tbody>
 </table>
+@section Scripts {
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+
+    <script>
+        $(function () {
+            $("table#pages tbody").sortable({
+                items: "tr:not(.home)",
+                placeholder: "ui-state-highlight",
+                update: function () {
+                    const ids = $("table#pages tbody").sortable("serialize");
+                    const url = "/admin/pages/ReorderPages";
+
+                    $.post(url, ids, function (data) { });
+                }
+            });
+        });
+    </script>
+
+}

@@ -10,6 +10,7 @@ namespace CMS_Ecommerce.Controllers
         private readonly DataContext _context = context;
         public async Task<IActionResult> Index(string slug= "")
         {
+            
             slug = slug.IsNullOrEmpty() ? "home" : slug;
             Page page = await _context.Pages.Where(x => x.Slug == slug).FirstOrDefaultAsync();
             if (page == null) { return NotFound(); }

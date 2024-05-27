@@ -21,6 +21,41 @@ namespace CMS_Ecommerce.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CMS_Ecommerce.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Shirts",
+                            Slug = "shirts"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Fruit",
+                            Slug = "fruit"
+                        });
+                });
+
             modelBuilder.Entity("CMS_Ecommerce.Models.Page", b =>
                 {
                     b.Property<int>("Id")
@@ -33,8 +68,10 @@ namespace CMS_Ecommerce.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -50,6 +87,7 @@ namespace CMS_Ecommerce.Migrations
                         {
                             Id = 1,
                             Body = "This is the home page ",
+                            Order = 100,
                             Slug = "home",
                             Title = "Home"
                         },
@@ -57,6 +95,7 @@ namespace CMS_Ecommerce.Migrations
                         {
                             Id = 2,
                             Body = "This is the about page ",
+                            Order = 100,
                             Slug = "about",
                             Title = "About"
                         },
@@ -64,6 +103,7 @@ namespace CMS_Ecommerce.Migrations
                         {
                             Id = 3,
                             Body = "This is the Services page ",
+                            Order = 100,
                             Slug = "services",
                             Title = "Services "
                         },
@@ -71,9 +111,140 @@ namespace CMS_Ecommerce.Migrations
                         {
                             Id = 4,
                             Body = "This is the contacte page ",
+                            Order = 100,
                             Slug = "contacte",
                             Title = "Contacte"
                         });
+                });
+
+            modelBuilder.Entity("CMS_Ecommerce.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(8, 2)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 2,
+                            Description = "Juicy apples",
+                            Image = "apple1.jpg",
+                            Name = "Apples",
+                            Price = 1.50m,
+                            Slug = "apples"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 2,
+                            Description = "Juicy grapefruit",
+                            Image = "grapefruit1.jpg",
+                            Name = "Grapefruit",
+                            Price = 2m,
+                            Slug = "grapefruit"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 2,
+                            Description = "Fresh grapes",
+                            Image = "grapes1.jpg",
+                            Name = "Grapes",
+                            Price = 1.80m,
+                            Slug = "grapes"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 2,
+                            Description = "Fresh oranges",
+                            Image = "orange1.jpg",
+                            Name = "Oranges",
+                            Price = 1.50m,
+                            Slug = "oranges"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 1,
+                            Description = "Nice blue t-shirt",
+                            Image = "blue1.jpg",
+                            Name = "Blue shirt",
+                            Price = 7.99m,
+                            Slug = "blue-shirt"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            Description = "Nice red t-shirt",
+                            Image = "red1.jpg",
+                            Name = "Red shirt",
+                            Price = 8.99m,
+                            Slug = "red-shirt"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 1,
+                            Description = "Nice green t-shirt",
+                            Image = "green1.png",
+                            Name = "Green shirt",
+                            Price = 9.99m,
+                            Slug = "green-shirt"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 1,
+                            Description = "Nice pink t-shirt",
+                            Image = "pink1.png",
+                            Name = "Pink shirt",
+                            Price = 10.99m,
+                            Slug = "pink-shirt"
+                        });
+                });
+
+            modelBuilder.Entity("CMS_Ecommerce.Models.Product", b =>
+                {
+                    b.HasOne("CMS_Ecommerce.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
